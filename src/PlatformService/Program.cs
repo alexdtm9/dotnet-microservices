@@ -1,10 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using PlatformService.Data;
+using PlatformService.SyncDataServices.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("InMem"));
+builder.Services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
 builder.Services.AddScoped<IPlatformRepo, PlatformRepo>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -23,11 +25,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
+ app.UseAuthorization();
 
 app.MapControllers();
 
+Console.WriteLine($"--> CommandService Endpoint {builder.Configuration["CommandService"]}");
 PrepDb.PrepPopulation(app, app.Environment.IsProduction());
-
 app.Run();
+
