@@ -1,0 +1,8 @@
+POST http://localhost:31023/api/Platforms
+Content-Type: application/json
+
+{
+  "name": "Docker",
+  "publisher": "Docker",
+  "cost": "Free"
+}
